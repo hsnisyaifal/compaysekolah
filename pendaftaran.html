@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pendaftaran SMK Bina Informatika</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #007bff, #00c6ff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: black;
+    }
+
+    .form-container {
+      max-width: 650px;
+      margin: 60px auto;
+      padding: 35px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h4 {
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-success {
+      background-color: #007bff;
+      border: none;
+    }
+
+    .btn-success:hover {
+      background-color: #0056b3;
+    }
+
+    .custom-antrian {
+      background-color: #0056b3;
+      color: white;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container animate__animated animate__fadeInDown">
+    <h1 class="text-center mb-4">Formulir Pendaftaran SMK Bina Informatika</h1>
+
+    <form id="formPendaftaran">
+      <div class="mb-3">
+        <label for="nama" class="form-label">Nama Calon Siswa</label>
+        <input type="text" class="form-control" id="nama" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="tanggalLahir" class="form-label">Tanggal Lahir</label>
+        <input type="date" class="form-control" id="tanggalLahir" required onchange="calculateAge()">
+      </div>
+
+      <div class="mb-3">
+        <label for="umur" class="form-label">Umur (Tahun)</label>
+        <input type="text" class="form-control" id="umur" readonly>
+      </div>
+
+      <div class="mb-3">
+        <label for="nisn" class="form-label">NISN</label>
+        <input type="text" class="form-control" id="nisn" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Jenis Kelamin</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="jk" id="laki" value="Laki-laki" required>
+          <label class="form-check-label" for="laki">Laki-laki</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="jk" id="perempuan" value="Perempuan">
+          <label class="form-check-label" for="perempuan">Perempuan</label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="jurusanSMK" class="form-label">Program Keahlian yang Diminati</label>
+        <select class="form-select" id="jurusanSMK" required>
+          <option value="">-- Pilih --</option>
+          <option value="MM">Multi Media (MM)</option>
+          <option value="TKJ">Teknik Komputer dan Jaringan (TKJ)</option>
+          <option value="OTKP">Otomatisasi dan Tata Kelola Perkantoran (OTKP)</option>
+          <option value="PKM">Perbankan dan Keuangan Mikro (PKM)</option>
+          <option value="RPL">Rekayasa Perangkat Lunak (RPL)</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="tanggalDaftar" class="form-label">Tanggal Pendaftaran</label>
+        <input type="date" class="form-control" id="tanggalDaftar" readonly required>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Daftar</button>
+    </form>
+
+    <div id="result" class="alert alert-info mt-4 d-none animate__animated animate__fadeInUp"></div>
+  </div>
+
+  <footer>
+    &copy; Pendaftaran SMK Bina Informatika Bogor
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function calculateAge() {
+      const birthDate = new Date(document.getElementById("tanggalLahir").value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      document.getElementById("umur").value = age;
+    }
+
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'id-ID';
+        msg.rate = 1;
+        msg.pitch = 1;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(msg);
+      }
+    }
+
+    // Isi otomatis tanggal pendaftaran
+    window.addEventListener("DOMContentLoaded", () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById("tanggalDaftar").value = `${yyyy}-${mm}-${dd}`;
+    });
+
+    document.getElementById("formPendaftaran").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      let nama = document.getElementById("nama").value;
+      let umur = document.getElementById("umur").value;
+      let nisn = document.getElementById("nisn").value;
+      let jenisKelamin = document.querySelector('input[name="jk"]:checked').value;
+      let jurusanSMK = document.getElementById("jurusanSMK").value;
+      let tanggalDaftar = document.getElementById("tanggalDaftar").value;
+      let nomorPendaftaran = Math.floor(Math.random() * 9000 + 1000);
+      let nomorWhatsApp = "6289617354862";
+
+      const result = document.getElementById("result");
+      result.innerHTML = `
+        <strong>Data Pendaftaran:</strong><br>
+        Nama: ${nama}<br>
+        Umur: ${umur} tahun<br>
+        NISN: ${nisn}<br>
+        Jenis Kelamin: ${jenisKelamin}<br>
+        Program Keahlian: ${jurusanSMK}<br>
+        Tanggal Pendaftaran: ${tanggalDaftar}<br><br>
+        <strong>Pendaftaran selesai. Anda akan diarahkan ke nomor di bawah ini:</strong><br>
+        <a href="https://wa.me/${nomorWhatsApp}?text=Halo, saya sudah mendaftar ke SMK Bina Informatika" target="_blank" class="custom-antrian text-decoration-none">
+          ${nomorWhatsApp}
+        </a>
+      `;
+      result.classList.remove("d-none");
+
+      const suara = `Pendaftaran berhasil. Nomor pendaftaran Anda adalah REG ${nomorPendaftaran}.`;
+      speak(suara);
+    });
+  </script>
+
+</body>
+</html>
